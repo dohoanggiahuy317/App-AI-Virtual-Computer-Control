@@ -1,9 +1,11 @@
 import cv2
-import autopy
 from cvzone.HandTrackingModule import HandDetector
+import autopy
+import osascript
 from pynput.mouse import Button, Controller
 
 
+# METHODS FOR CONTROLLING MOUSE
 def mouse_click(button):
     autopy.mouse.click(button, None)
 
@@ -17,37 +19,44 @@ def mouse_move(wrist_pos_x, wrist_pos_y):
 
 
 def left_hand_gesture(fingers1, landmarks_list):
-    global pressing_bool
-    if fingers1 == [0, 1, 1, 1, 1]:  # mouse click
+    global curr_vol
+    if fingers1 == [0, 1, 1, 1, 1] or fingers1 == [1, 0, 0, 0, 0]:  # mouse click
         mouse_click(autopy.mouse.Button.LEFT)
 
     if fingers1 == [1, 0, 1, 1, 1]:  # mouse scroll
-        mymouse.scroll(0, 4)
+        mymouse.scroll(0, -5)
 
-    if fingers1 == [1, 0, 0, 0, 0] and pressing_bool == False:
-        mymouse.press(Button.left)
-        pressing_bool = True
+    if fingers1 == [1, 1, 0, 0, 1]:  # Mouse click middle
+        mouse_click(autopy.mouse.Button.MIDDLE)
 
-    if fingers1 == [1, 1, 1, 1, 1]:
-        mymouse.release(Button.left)
-        pressing_bool = False
+    if fingers1 == [0, 0, 0, 0, 0]:  # increase volume
+        curr_vol += 3
+        vol = "set volume output volume " + str(curr_vol)
+        osascript.osascript(vol)
 
     mouse_move(landmarks_list[0][0], landmarks_list[0][1])  # mouse move
 
 
 def right_hand_gesture(fingers2):
-    if fingers2 == [0, 1, 1, 1, 1]:
+    global curr_vol
+    if fingers2 == [0, 1, 1, 1, 1]:  # right click
         mouse_click(autopy.mouse.Button.RIGHT)
 
     if fingers2 == [1, 0, 1, 1, 1]:  # mouse scroll
-        mymouse.scroll(0, -4)
+        mymouse.scroll(0, 5)
 
+    if fingers2 == [0, 0, 0, 0, 0]:  # decrease volume
+        curr_vol -= 3
+        vol = "set volume output volume " + str(curr_vol)
+        osascript.osascript(vol)
 
 # TAKING INPUT IMAGE
 detector = HandDetector(detectionCon=0.8, maxHands=2)
 cap = cv2.VideoCapture(0)
 mymouse = Controller()
 pressing_bool = False
+code, curr_vol, err = osascript.run("output volume of (get volume settings)")
+curr_vol = int(curr_vol)
 
 while True:
     # Get image frame
