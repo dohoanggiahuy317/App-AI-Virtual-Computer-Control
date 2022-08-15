@@ -7,8 +7,6 @@ The program can detect multiple Left and Right hands, face recognition, lips, ey
 
 <img width="800" alt="Screen Shot 2022-06-27 at 9 16 59 PM" src="https://user-images.githubusercontent.com/72744045/175969062-f11ab89f-0616-45de-8f7f-6e720882b594.png">
 
-
-
 ## Mouse Control using fingers gesture
 Users can control their mouse of the computer with multiple hand gesture.
 
