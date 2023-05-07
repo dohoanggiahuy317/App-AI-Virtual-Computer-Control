@@ -1,4 +1,4 @@
-# App_Virtual_Computer_Control
+# App_Hand_gesture_Computer_Control
 The program uses OpenCV, Mediapipe, and CVzone tracks the motion of hands and faces with webcam. It also allows user to control the mouse of the computer with hands motion and fingers gestures.
 
 ## Faces and Hands detection
